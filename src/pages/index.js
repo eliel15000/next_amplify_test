@@ -3,6 +3,7 @@ import Image from 'next/image'
 import React, { useState } from "react"
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
+import axios from "axios"
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -12,13 +13,18 @@ export default function Home() {
   const [query, setQuery] = useState("banana");
 
   const getRecipes = async () => {
-    const response = await fetch(
-      `https://api.edamam.com/api/recipes/v2?type=public&q=${query}&app_id=${process.env.NEXT_PUBLIC_APP_ID}&app_key=${process.env.NEXT_PUBLIC_APP_KEY}`
-    );
-    const data = await response.json();
+    // const response = await fetch(
+    //   `https://api.edamam.com/api/recipes/v2?type=public&q=${query}&app_id=${process.env.NEXT_PUBLIC_APP_ID}&app_key=${process.env.NEXT_PUBLIC_APP_KEY}`
+    // );
+    // const data = await response.json();
+    // setRecipes(data.hits);
     // console.log(data.hits);
-    setRecipes(data.hits);
-    console.log(data.hits);
+
+    const response = axios.get(`https://api.edamam.com/api/recipes/v2?type=public&q=${query}&app_id=${process.env.NEXT_PUBLIC_APP_ID}&app_key=${process.env.NEXT_PUBLIC_APP_KEY}`);
+    response.then((res) => {
+      setRecipes(res.data.hits);
+      console.log(res.data.hits);
+    })
   };
 
   // const helloF = () => {
